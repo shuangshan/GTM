@@ -32,33 +32,32 @@
 </noscript>
 <!-- End Google Tag Manager (noscript) -->
 <div>
-    Please input your URL: <input type="text" name="urlstring" size="300"
-                                  value=https://www.google.com/search?q=Google+Tag+Manager&oq=go&aqs=chrome.1.69i60j69i59l2j69i60l3.4845j0j1&sourceid=chrome&ie=UTF-8"/>
+    Please input your URL: <input type="text" id="urlstring" name="urlstring" size="300"
+                                  value="https://www.google.com/search?q=Google+Tag+Manager&oq=go&aqs=chrome.1.69i60j69i59l2j69i60l3.4845j0j1&sourceid=chrome&ie=UTF-8"/>
 
-</div>
-<script>
+    <script>
 
-	// 1 . adds the key and value from query string parameters to the GTM data layer
-	function getQueryString(querySource) {
-		var result = querySource.match(new RegExp('[\?\&][^\?\&]+=[^\?\&]+', 'g'));
-		var jsonArray = [];
-		for (var i = 0; i < result.length; i++) {
-			result[i] = result[i].substring(1);
-			var resultSplit = result[i].split('=');
-			var jsonData = {};
-			jsonData[resultSplit[0]] = resultSplit[1];
-			jsonArray.push(jsonData);
-//			dataLayer.push(jsonData);
+		// 1 . adds the key and value from query string parameters to the GTM data layer
+		function putQueryStringToDataLayer() {
+			var urlString = document.getElementById('urlstring').value;
+			var result = urlString.match(new RegExp('[\?\&][^\?\&]+=[^\?\&]+', 'g'));
+			var jsonArray = [];
+			for (var i = 0; i < result.length; i++) {
+				result[i] = result[i].substring(1);
+				var resultSplit = result[i].split('=');
+				var jsonData = {};
+				jsonData[resultSplit[0]] = resultSplit[1];
+				jsonArray.push(jsonData);
+			}
+			var pushJsonData = {};
+			pushJsonData.querystring = jsonArray;
+			dataLayer.push(pushJsonData);
+			return result;
 		}
-		var pushJsonData = {};
-		pushJsonData.querystring = jsonArray;
-		dataLayer.push(pushJsonData);
-		return result;
-	}
 
-	var aa = getQueryString('?a=1&b=2&c=3')
-
-</script>
+    </script>
+    <input type="submit" value="Add query string to GTM data layer" onclick="putQueryStringToDataLayer()">
+</div>
 
 <!--2 API Implementation-->
 <div>
