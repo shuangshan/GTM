@@ -21,6 +21,20 @@
     <!-- End Google Tag Manager -->
     <script data-ad-client="ca-pub-5898770365399874" async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+    <!--bootstrap-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
@@ -31,75 +45,91 @@
             height="0" width="0" style="display:none;visibility:hidden"></iframe>
 </noscript>
 <!-- End Google Tag Manager (noscript) -->
-<div>
-    Please input your URL: <input type="text" id="urlstring" name="urlstring" size="300"
-                                  value="https://www.google.com/search?q=Google+Tag+Manager&oq=go&aqs=chrome.1.69i60j69i59l2j69i60l3.4845j0j1&sourceid=chrome&ie=UTF-8"/>
+<div class=".container-fluid">
+    <div class="row">
+        <div class="col-xs-12">
+            Please input your URL:
+        </div>
+        <div class="col-xs-12">
+            <input type="text" id="urlstring" name="urlstring" size="200"
+                   value="https://www.google.com/search?q=Google+Tag+Manager&oq=go&aqs=chrome.1.69i60j69i59l2j69i60l3.4845j0j1&sourceid=chrome&ie=UTF-8"/>
+        </div>
 
-    <script>
+        <script>
 
-		// 1 . adds the key and value from query string parameters to the GTM data layer
-		function putQueryStringToDataLayer() {
-			var urlString = document.getElementById('urlstring').value;
-			var result = urlString.match(new RegExp('[\?\&][^\?\&]+=[^\?\&]+', 'g'));
-			var jsonArray = [];
-			for (var i = 0; i < result.length; i++) {
-				result[i] = result[i].substring(1);
-				var resultSplit = result[i].split('=');
-				var jsonData = {};
-				jsonData[resultSplit[0]] = resultSplit[1];
-				jsonArray.push(jsonData);
+			// 1 . adds the key and value from query string parameters to the GTM data layer
+			function putQueryStringToDataLayer() {
+				var urlString = document.getElementById('urlstring').value;
+				var result = urlString.match(new RegExp('[\?\&][^\?\&]+=[^\?\&]+', 'g'));
+				var jsonArray = [];
+				for (var i = 0; i < result.length; i++) {
+					result[i] = result[i].substring(1);
+					var resultSplit = result[i].split('=');
+					var jsonData = {};
+					jsonData[resultSplit[0]] = resultSplit[1];
+					jsonArray.push(jsonData);
+				}
+				var pushJsonData = {};
+				pushJsonData.querystring = jsonArray;
+				dataLayer.push(pushJsonData);
+				alert('Add success! The data is: ' + JSON.stringify(dataLayer));
+				return result;
 			}
-			var pushJsonData = {};
-			pushJsonData.querystring = jsonArray;
-			dataLayer.push(pushJsonData);
-			return result;
-		}
 
-    </script>
-    <input type="submit" value="Add query string to GTM data layer" onclick="putQueryStringToDataLayer()">
-</div>
+        </script>
+        <input type="submit" value="Add query string to GTM data layer" onclick="putQueryStringToDataLayer()">
+    </div>
+    <div class="row">
+        <h1>
 
-<!--2 API Implementation-->
-<div>
-    <input type="submit" value="Send Request To Httpbin" onclick="sendRequest()">
-</div>
+        </h1>
+        <!--2 API Implementation-->
+        <div>
+            <input type="submit" value="Send Request To Httpbin" size="300" onclick="sendRequest()">
+        </div>
 
-<script type="text/javascript">
-	function sendRequest() {
-		var xhr = new XMLHttpRequest();
-		var sendData = dataLayer[1].querystring;
-		xhr.onreadystatechange = function () {
-			if (xhr.readyState === 4) {
-				alert(xhr.response);
+        <script type="text/javascript">
+			function sendRequest() {
+				var xhr = new XMLHttpRequest();
+				var sendData = dataLayer[1].querystring;
+				xhr.onreadystatechange = function () {
+					if (xhr.readyState === 4) {
+						alert(xhr.response);
+					}
+				}
+				xhr.open('get', 'https://httpbin.org/get', true);
+				xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+				xhr.send(sendData);
 			}
-		}
-		xhr.open('get', 'https://httpbin.org/get', true);
-		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-		xhr.send(sendData);
-	}
 
-</script>
+        </script>
+    </div>
+    <div class="row">
+        <!--3.Javascript tag implementation-->
+        <!--<script src="http://c.fqtag.com/tag/implement-r.js?org=BB6DvPmytpFndg8atDcN&p=https%3A%2F%2Fshuangshan.github.io&a=Paw%2F3.1.5%20%28Macintosh%3B%20OS%20X%2F10.15.0%29%20GCDHTTPRequest&cmp=shuangshan&fmt=banner&rt=display&sl=1&fq=1"></script>-->
+        <div>
+            <script class="cc-onconsent-inline-advertising"
+                    src="https://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:728px;height:90px"
+                 data-ad-client="ca-pub-5898770365399874"
+                 data-ad-slot="1234567890"></ins>
 
-<!--3.Javascript tag implementation-->
-<!--<script src="http://c.fqtag.com/tag/implement-r.js?org=BB6DvPmytpFndg8atDcN&p=https%3A%2F%2Fshuangshan.github.io&a=Paw%2F3.1.5%20%28Macintosh%3B%20OS%20X%2F10.15.0%29%20GCDHTTPRequest&cmp=shuangshan&fmt=banner&rt=display&sl=1&fq=1"></script>-->
-<div>
-    <script class="cc-onconsent-inline-advertising"
-            src="https://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
-    <ins class="adsbygoogle"
-         style="display:inline-block;width:728px;height:90px"
-         data-ad-client="ca-pub-5898770365399874"
-         data-ad-slot="1234567890"></ins>
+        </div>
+        <script>
+			(adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+
+        <!--<div>-->
+        <!--<iframe src="https://c.fqtag.com/tag/implement-r.js?org=BB6DvPmytpFndg8atDcN&p=https%3A%2F%2Fshuangshan.github.io&a=Paw%2F3.1.5%20%28Macintosh%3B%20OS%20X%2F10.15.0%29%20GCDHTTPRequest&cmp=shuangshan&fmt=banner&rt=display&sl=1&fq=1"-->
+        <!--frameborder="1" width="80%" height="50%" scrolling="no">-->
+        <!--</iframe>-->
+        <!--</div>-->
+    </div>
 
 </div>
-<script>
-	(adsbygoogle = window.adsbygoogle || []).push({});
-</script>
 
-<div>
-    <iframe src="https://c.fqtag.com/tag/implement-r.js?org=BB6DvPmytpFndg8atDcN&p=https%3A%2F%2Fshuangshan.github.io&a=Paw%2F3.1.5%20%28Macintosh%3B%20OS%20X%2F10.15.0%29%20GCDHTTPRequest&cmp=shuangshan&fmt=banner&rt=display&sl=1&fq=1"
-            frameborder="1" width="80%" height="50%" scrolling="no">
-    </iframe>
-</div>
+
 </body>
 
 
